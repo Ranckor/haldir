@@ -1,6 +1,6 @@
 #specific
 ocr/*
-data/*
+
 
 
 *.log
@@ -30,6 +30,6 @@ data/*
 *.jpeg
 
 #python
-__pycache__
+*.py[cod]
 
 
