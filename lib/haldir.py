@@ -9,17 +9,18 @@ ocr_dir = "ocr/"
 file_comp_sets = "data/lists.csv"
 file_comp_female= "data/female.txt"
 file_comp_male= "data/male.txt"
+act_year =  0                           #holds actual year given by filename
 
 ### OCR specific procedures ###
 
-def get_ocr_files(ocr_dir):
+def get_ocr_files(ocr_path=ocr_dir):
     "returns a alphabeticaly sorted list of files in given path"
 
     try:
-        ocr_files = sorted(glob(ocr_dir + "*ocr*"),key=str.lower)
+        ocr_files = sorted(glob(ocr_path + "*ocr*"),key=str.lower)
     except Exception as e:
         print(e)
-        print("Verzeichnis {} konnte nicht geöffnet werden".format(ocr_dir))
+        print("Verzeichnis {} konnte nicht geöffnet werden".format(ocr_path))
         return
 
     return ocr_files
@@ -35,9 +36,16 @@ def print_ocr_files(ocr_files):
 def get_ocr_lines(ocr_dir):
     """creates filehandle for the given file path, acts as generator
     and returns lines for all ocr files."""
-    
+
+    def set_act_year(ocr_filename):
+        year = ocr_filename[5:9]
+        print("\n\n---- {} ----\n\n".format(year))
+        # TBD - check if year ist a 4 digit number
+        act_year = year
+
     try:
-        for ocr_file in get_ocr_files(ocr_dir):
+        for ocr_file in get_ocr_files():
+            set_act_year(ocr_file)
             with open(ocr_file, 'r') as f:
                 for ocr_line in f:
                     ocr_line = ocr_line.rstrip()
@@ -60,6 +68,8 @@ def get_csv_rows():
     csv_reader = csv.reader(get_ocr_lines(ocr_dir),delimiter=',')
     for row in csv_reader:
         yield row
+
+
 
 
 ### importing sets for comparision ###
@@ -148,3 +158,15 @@ def build_male_set(malepath=file_comp_male,femalepath=file_comp_female):
         print("Die Dateien {} konnten nicht geöffnet werden".format(path))
 
     return (comp_male_set, comp_female_set)
+
+
+
+#### parsing functions ####
+
+
+#def get_surname()
+
+
+
+
+
