@@ -22,7 +22,9 @@ male_set, female_set = hd.build_male_set()
 #print(female_set)
 #print(type(female_set))
 #print all lines of all ocr files
-hd.print_ocr_lines()
+#hd.print_ocr_lines()
+
+hd.assemble_lines()
 
 #hd.print_ocr_files(hd.get_ocr_files())
 

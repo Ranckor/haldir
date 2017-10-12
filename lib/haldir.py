@@ -10,6 +10,7 @@ file_comp_sets = "data/lists.csv"
 file_comp_female= "data/female.txt"
 file_comp_male= "data/male.txt"
 act_year =  0                           #holds actual year given by filename
+act_page =  0                           #holds actual year given by filename
 
 ### OCR specific procedures ###
 
@@ -42,10 +43,17 @@ def get_ocr_lines(ocr_dir):
         print("\n\n---- {} ----\n\n".format(year))
         # TBD - check if year ist a 4 digit number
         act_year = year
+    
+    def set_act_page(ocr_filename):
+        page = ocr_filename[10:14]
+        print("\n\n---- Page:  {} ----\n\n".format(page))
+        # TBD - check for validity and cut the zeros
+        act_page = page
 
     try:
         for ocr_file in get_ocr_files():
             set_act_year(ocr_file)
+            set_act_page(ocr_file)
             with open(ocr_file, 'r') as f:
                 for ocr_line in f:
                     ocr_line = ocr_line.rstrip()
@@ -160,12 +168,38 @@ def build_male_set(malepath=file_comp_male,femalepath=file_comp_female):
     return (comp_male_set, comp_female_set)
 
 
+# parsing functions #
 
-#### parsing functions ####
+"""
+def assemble_lines():
+
+    try:
+        processed_lines = 0
+        for act_row in get_ocr_lines(ocr_dir):
+            if (processed_lines > 0) and (old_row[-1] == "-"):
+
+                if act_row[0].islower():
+                    fin_row = old_row[0:-2] + act_row
+                else:
+                    fin_row = old_row + act_row
+
+            elif (processed_lines > 0) and not (act_row[-1] == "-"):
+                fin_row = act_row
+            
+            if processed_lines <= 0:
+                fin_row = act_row
+
+            old_row = fin_row
+            processed_lines += 1
+            print(fin_row)
+
+    except Exception as e:
+        print(e)
+        print("Probleme beim Zusammensetzen der Zeilen")
 
 
-#def get_surname()
 
+"""
 
 
 
