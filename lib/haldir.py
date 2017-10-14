@@ -3,6 +3,7 @@
 """
 
 import csv
+import re
 from glob import  glob
 
 ocr_dir = "ocr/"
@@ -168,39 +169,60 @@ def build_male_set(malepath=file_comp_male,femalepath=file_comp_female):
     return (comp_male_set, comp_female_set)
 
 
-# parsing functions #
 
-"""
-def assemble_lines():
 
+#TBD BETA
+def is_new_row(row,comp_sets):
+    """ Function takes a raw csv-row and checks if this is the beginning of
+        a new data set """
+    
+    re_names = re.compile(r"^-\s.*")
+    # a line with "-" at the beginning
+    
     try:
-        processed_lines = 0
-        for act_row in get_ocr_lines(ocr_dir):
-            if (processed_lines > 0) and (old_row[-1] == "-"):
 
-                if act_row[0].islower():
-                    fin_row = old_row[0:-2] + act_row
-                else:
-                    fin_row = old_row + act_row
-
-            elif (processed_lines > 0) and not (act_row[-1] == "-"):
-                fin_row = act_row
-            
-            if processed_lines <= 0:
-                fin_row = act_row
-
-            old_row = fin_row
-            processed_lines += 1
-            print(fin_row)
+        if row[0] in comp_sets["names"]:
+            print(row[0], "exisits in lists")
+            return True
+        elif re.search(re_names,row[0]):
+            print(row[0], "exisits in lists")
+            return True
+        else:
+            return False
 
     except Exception as e:
         print(e)
-        print("Probleme beim Zusammensetzen der Zeilen")
+        print("Probleme bei der Zeilenprüfung: neue Zeile")
+
+#TBD BETA
+def assemble_lines(comp_sets):
+
+    temp_row    = []
+    fin_row     = []
+    proceeded = 0
+    try:
+        for act_row in get_csv_rows():
+            proceeded += 1
+            print("Zeile: ", proceeded)
+            #print(act_row)
+            
+            if is_new_row(act_row,comp_sets):
+                #tbd temp_row_zusammenfügen
+                if len(temp_row) > 0:
+                    fin_row += temp_row
+                    print("\n\nFINAL::",fin_row, "\n-----\n")
+                    temp_row = []
+                    fin_row = []
+
+                temp_row.append(act_row)
+                print(len(temp_row))
+                #print(temp_row[i])
+
+            else:
+                temp_row.append(act_row)
 
 
-
-"""
-
-
-
+    except Exception as e:
+        print(e)
+        print("Probleme beim Zusammenfügen der Zeilen")
 
